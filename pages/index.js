@@ -15,18 +15,18 @@ export default function Home() {
   const [loadingState, setLoadingState] = useState('not-loaded')
 
   useEffect(() => {
-    loadNfts()
+    loadNFTs()
   }, [])
 
-  async function loadNfts() {
+  async function loadNFTs() {
     const provider = new ethers.providers.JsonRpcProvider()
     const tokenContract = new ethers.Contract(nftaddress, NFT.abi, provider)
     const marketContract = new ethers.Contract(nftmarketaddress, NFTMarket.abi, provider)
     const data = await marketContract.fetchMarketItems()
 
     const items = await Promise.all(data.map(async i => { 
-      const tokenUri = await tokenContract.tokenURI(i.tokenId)
-      const meta = await axios.get(tokenUri)
+      const tokenURI = await tokenContract.tokenURI(i.tokenId)
+      const meta = await axios.get(tokenURI)
       let price = ethers.utils.formatUnits(i.price.toString(), "ether")
       let item = {
         price,
@@ -49,7 +49,7 @@ export default function Home() {
     const provider = new ethers.providers.Web3Provider(connection)
     
     const signer = provider.getSigner()
-    const contract = new ethers.Contract(nftmarketaddress, Market.abi, signer)
+    const contract = new ethers.Contract(nftmarketaddress, NFTMarket.abi, signer)
 
     const price = ethers.utils.parseUnits(nft.price.toString(), 'ether')
 
